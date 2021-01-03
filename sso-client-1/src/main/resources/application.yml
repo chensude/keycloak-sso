@@ -1,11 +1,16 @@
 spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: root
+    url: jdbc:mysql://localhost:3306/keycloak1
   security:
     oauth2:
       client:
         registration:
           custom:
-            client-id: sso-client-1
-            client-secret: 5b195950-b7d0-410c-a879-2fed5b9fae64
+            client-id: client-one
+            client-secret: dc769165-2a2e-40c2-bcba-13abd511fecf
             authorization-grant-type: authorization_code
             redirect-uri: http://localhost:8082/client-one/login/oauth2/code/custom
         provider:
@@ -17,10 +22,22 @@ spring:
       resourceserver:
         jwt:
           jwk-set-uri: ${JWK_SET_URI:http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/certs}
+          issuer-uri: http://localhost:8080/auth/realms/sso-demo
   thymeleaf:
     cache: false
   cache:
     type: NONE
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+  main:
+    allow-bean-definition-overriding: true
+auth2:
+  keycloak:
+    client-id: client-one
+    client-secret: dc769165-2a2e-40c2-bcba-13abd511fecf
+    token-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/token
 
 server:
   port: 8082
@@ -30,3 +47,14 @@ server:
 logging:
   level:
     org.springframework: DEBUG
+resourceServer:
+    resourceId: client-one
+
+
+
+
+keycloak:
+  realm: sso-demo
+  resource: client-one
+  auth-server-url: http://localhost:8080/auth
+  ssl-required: external

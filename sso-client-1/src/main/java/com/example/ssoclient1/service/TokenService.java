@@ -34,12 +34,12 @@ public class TokenService {
 
         MultiValueMap<String, String> map = new LinkedMultiValueMap<>();
         map.add("grant_type", "client_credentials");
-        map.add("client_id", "sso-client-1");
+        map.add("client_id", "client-one");
         map.add("client_secret", "edc45ef0-32ca-434f-a9f9-87ca4f80ca3f");
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         ResponseEntity<JwtToken> res = simpleRestTemplate.exchange(
-            "http://localhost:8080/auth/realms/imooc/protocol/openid-connect/token",
+            "http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/token",
             HttpMethod.POST,
             request,
             JwtToken.class
