@@ -53,7 +53,7 @@ public class SecurityUtils {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority authority : authorities) {
-            String url = authority.getAuthority();
+            String url = authority.getAuthority().replace("ROLE_","");
             if (StringUtils.isNotEmpty(url)) {
                 path.add(url);
             }

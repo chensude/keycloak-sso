@@ -48,10 +48,12 @@ public class UacPermissionServiceImpl implements UacPermissionService {
             if (requestURI.contains("query") || requestURI.contains("get") || requestURI.contains("check") || requestURI.contains("select")) {
                 return true;
             }
-            if (antPathMatcher.match(authority, requestURI)) {
+            if (antPathMatcher.match(requestURI,authority)) {
                 return true;
             }
         }
-        return true;
+        return false;
     }
+
+
 }

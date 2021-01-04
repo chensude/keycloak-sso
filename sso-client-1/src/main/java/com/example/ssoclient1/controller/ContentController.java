@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -47,24 +48,23 @@ public class ContentController {
 
 
     @GetMapping("/content")
-    public String getFoos(final OAuth2AuthenticationToken token) {
+    public String getFoos(Authentication authentication) {
+     //   token.getPrincipal();
+//        OAuth2AuthorizedClient oAuth2AuthorizedClient = authorizedClientService.
+//                loadAuthorizedClient(token.getAuthorizedClientRegistrationId(), token.getName());
+//        if (oAuth2AuthorizedClient == null) {
+//            throw new UnapprovedClientAuthenticationException("clientId对应的配置信息不存在:" + oAuth2AuthorizedClient);
+//        }
+//
+//        final OAuth2AccessToken accessToken = oAuth2AuthorizedClient.getAccessToken();
 
+//        if (hasTokenExpired(accessToken)) {
+//
+//            KeyToken refresh = authenticationService.refresh(accessToken.getTokenValue());
+//            return refresh.getAccessToken();
+//        }
 
-        OAuth2AuthorizedClient oAuth2AuthorizedClient = authorizedClientService.
-                loadAuthorizedClient(token.getAuthorizedClientRegistrationId(), token.getName());
-        if (oAuth2AuthorizedClient == null) {
-            throw new UnapprovedClientAuthenticationException("clientId对应的配置信息不存在:" + oAuth2AuthorizedClient);
-        }
-
-        final OAuth2AccessToken accessToken = oAuth2AuthorizedClient.getAccessToken();
-
-        if (hasTokenExpired(accessToken)) {
-
-            KeyToken refresh = authenticationService.refresh(accessToken.getTokenValue());
-            return refresh.getAccessToken();
-        }
-
-        return BEARER_ACCESS_TOKEN_PREFIX+accessToken.getTokenValue();
+        return BEARER_ACCESS_TOKEN_PREFIX;
     }
 
     @PostMapping(value = "/oauth2/token")
