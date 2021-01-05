@@ -54,7 +54,7 @@ server:
 
 logging:
   level:
-    org.springframework: DEBUG
+    com.etocrm: error
 resourceServer:
     resourceId: ${oauth.base.client-id}
 
