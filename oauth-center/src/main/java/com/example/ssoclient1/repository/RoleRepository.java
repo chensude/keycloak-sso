@@ -1,13 +1,5 @@
 package com.example.ssoclient1.repository;
 
-import com.example.ssoclient1.domain.entity.Role;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.stereotype.Repository;
-
-import java.util.List;
-
 /**
  * @author csd
  * @desc

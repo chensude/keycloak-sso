@@ -1,30 +1,35 @@
-
+oauth:
+  base:
+    url: https://sha-keycloak.etocrm.net
+    secret: ec35ce77-fb0b-405e-8254-fbedcb1eee70
+    client-id: oauth-center
+    reaml: myrealm
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    username: root
-    password: root
-    url: jdbc:mysql://localhost:3306/keycloak1
+    username: dev_root
+    password: D0tC3^v_LYw$24LY
+    url: jdbc:mysql://10.100.20.243:3306/pim?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false
   security:
     oauth2:
       client:
         registration:
           custom:
-            client-id: client-one
-            client-secret: dc769165-2a2e-40c2-bcba-13abd511fecf
+            client-id: ${oauth.base.client-id}
+            client-secret: ${oauth.base.secret}
             authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8081/sso/login
+            redirect-uri: http://localhost:8081/${server.servlet.context-path}/sso/login
         provider:
           custom:
-            authorization-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/auth
-            token-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/token
-            user-info-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/userinfo
+            authorization-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/auth
+            token-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/token
+            user-info-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/userinfo
             user-name-attribute: preferred_username
 
       resourceserver:
         jwt:
-          jwk-set-uri: ${JWK_SET_URI:http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/certs}
-          issuer-uri: http://localhost:8080/auth/realms/sso-demo
+          jwk-set-uri: ${JWK_SET_URI:${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/certs}
+          issuer-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}
   thymeleaf:
     cache: false
   cache:
@@ -37,30 +42,30 @@ spring:
     allow-bean-definition-overriding: true
 auth2:
   keycloak:
-    client-id: client-one
-    client-secret: dc769165-2a2e-40c2-bcba-13abd511fecf
-    token-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/token
+    client-id: ${oauth.base.client-id}
+    client-secret: ${oauth.base.secret}
+    token-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/token
 
 
 server:
   port: 8081
   servlet:
-    context-path: /client-one
+    context-path: /${oauth.base.client-id}
 
 logging:
   level:
     org.springframework: DEBUG
 resourceServer:
-    resourceId: client-one
+    resourceId: ${oauth.base.client-id}
 
 
 
 
 keycloak:
-  auth-server-url: http://localhost:8080/auth
-  realm: sso-demo
+  auth-server-url: ${oauth.base.url}/auth
+  realm: ${oauth.base.reaml}
   #public-client: true
-  resource: client-one
+  resource: ${oauth.base.client-id}
   principal-attribute: preferred_username
   credentials:
-    secret: dc769165-2a2e-40c2-bcba-13abd511fecf
+    secret: ${oauth.base.secret}
