@@ -50,7 +50,7 @@ public class Oauth2FeignErrorInterceptor  implements ErrorDecoder  {
                 }
             }
         } catch (IOException e) {
-            log.info("Failed to process response body");
+           // log.info("Failed to process response body");
         }
         return defaultErrorDecoder.decode(methodKey, response);
     }

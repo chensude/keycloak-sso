@@ -2,6 +2,7 @@ package com.etocrm.controller;
 
 
 import com.etocrm.dto.KeyToken;
+import com.etocrm.rest.UacFeignClient;
 import com.etocrm.service.AuthenticationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +30,16 @@ public class LoginController {
     private final AuthenticationService authenticationService;
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
-
+    @Autowired
+    private UacFeignClient uacFeignClient;
 
     public LoginController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
-
+    @GetMapping("/hi")
+    public String testFeignClient() {
+        return uacFeignClient.greeting();
+    }
 
     @GetMapping("/test")
     public String getFoos(Authentication authentication) {

@@ -1,6 +1,7 @@
 package com.etocrm.security.feign;
 
 import feign.Logger;
+import feign.RequestInterceptor;
 import feign.codec.ErrorDecoder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,14 +54,13 @@ public class OAuth2FeignAutoConfiguration {
     /**
      * Oauth 2 feign request interceptor request interceptor.
      *
-     * @param oAuth2RestTemplate the o auth 2 rest template
      *
      * @return the request interceptor
      */
-//    @Bean
-//    public RequestInterceptor oauth2FeignRequestInterceptor(@Qualifier("nepousOAuth2RestTemplate") OAuth2RestTemplate oAuth2RestTemplate) {
-//        return new OAuth2FeignRequestInterceptor(oAuth2RestTemplate);
-//    }
+    @Bean
+    public RequestInterceptor oauth2FeignRequestInterceptor() {
+        return new OAuth2FeignRequestInterceptor();
+    }
 
     /**
      * Feign logger level logger . level.

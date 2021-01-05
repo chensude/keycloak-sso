@@ -1,32 +1,36 @@
-spring:
-  security:
-    oauth2:
-      client:
-        registration:
-          custom:
-            client-id: sso-client-2
-            client-secret: 2a8a69e0-17b9-4e88-a6bd-ad888c80ca41
-            authorization-grant-type: authorization_code
-            redirect-uri: http://localhost:8083/client-two/login/oauth2/code/custom
-        provider:
-          custom:
-            authorization-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/auth
-            token-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/token
-            user-info-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/userinfo
-            user-name-attribute: preferred_username
-      resourceserver:
-        jwt:
-          jwk-set-uri: ${JWK_SET_URI:http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/certs}
-  thymeleaf:
-    cache: false
-  cache:
-    type: NONE
+#spring:
+#  security:
+#    oauth2:
+#      client:
+#        registration:
+#          custom:
+#            client-id: sso-client-2
+#            client-secret: 2a8a69e0-17b9-4e88-a6bd-ad888c80ca41
+#            authorization-grant-type: authorization_code
+#            redirect-uri: http://localhost:8083/client-two/login/oauth2/code/custom
+#        provider:
+#          custom:
+#            authorization-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/auth
+#            token-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/token
+#            user-info-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/userinfo
+#            user-name-attribute: preferred_username
+#      resourceserver:
+#        jwt:
+#          jwk-set-uri: ${JWK_SET_URI:http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/certs}
 
+spring:
+  cloud:
+    nacos:
+      discovery:
+        namespace: e2562b25-c730-42ff-ace1-fa3a5fed5fbb
+        server-addr: 10.100.20.243:8848
+  application:
+    name: sso-client-two
 server:
   port: 8083
-  servlet:
-    context-path: /client-two
+#  servlet:
+#    context-path: /oauth-center
 
-logging:
-  level:
-    org.springframework: DEBUG
+feign:
+  hystrix:
+    enabled: true

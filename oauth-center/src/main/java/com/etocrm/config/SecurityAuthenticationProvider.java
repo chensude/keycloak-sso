@@ -52,8 +52,10 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
         //根据userId查询本系统用户权限，放入token中
         //    List<GrantedAuthority> grantedAuthorities = roleService.getGrantedAuthorities(userId);
         List<UacAction> ownAuthList = new ArrayList<>();
-        UacAction uacAction1 = new UacAction("/oauth-center/test", "2", "23", "321", "321");
+        UacAction uacAction1 = new UacAction("/test", "2", "23", "321", "321");
+        UacAction uacAction2 = new UacAction("/hi", "2", "23", "321", "321");
         ownAuthList.add(uacAction1);
+        ownAuthList.add(uacAction2);
         List<GrantedAuthority> authList = new ArrayList<>();
         for(UacAction uacAction: ownAuthList) {
             SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(uacAction.getUrl());
