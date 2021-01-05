@@ -11,7 +11,7 @@
     <groupId>com.example</groupId>
     <artifactId>sso-center</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>sso-client-1</name>
+    <name>sso-center</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>

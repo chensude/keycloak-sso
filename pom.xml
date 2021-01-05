@@ -17,6 +17,7 @@
     <modules>
         <module>oauth-center</module>
         <module>sso-client-2</module>
+        <module>keycloak-security-core</module>
     </modules>
 
     <properties>
