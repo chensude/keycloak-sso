@@ -1,3 +1,4 @@
+
 spring:
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -39,6 +40,7 @@ auth2:
     client-id: client-one
     client-secret: dc769165-2a2e-40c2-bcba-13abd511fecf
     token-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/token
+
 
 server:
   port: 8081
