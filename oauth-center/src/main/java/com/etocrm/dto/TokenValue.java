@@ -9,7 +9,7 @@ import lombok.Data;
  * @date 1/3/21 6:42 PM
  **/
 @Data
-public class KeyToken {
+public class TokenValue {
 
     @JsonProperty("access_token")
     private String accessToken;

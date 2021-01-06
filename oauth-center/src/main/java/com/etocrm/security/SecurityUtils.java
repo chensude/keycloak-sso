@@ -15,9 +15,10 @@ import java.util.Set;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class SecurityUtils {
-
+    private static final String AUTH_LOGIN_BEFORE_URL = "/login";
     private static final String AUTH_LOGIN_AFTER_URL = "/user/loginAfter/*";
     private static final String AUTH_LOGOUT_URL = "/user/logout";
+    private static final String ADD_USER_URL = "/add/user";
 
     /**
      * Gets current login name.
@@ -57,8 +58,10 @@ public class SecurityUtils {
                 path.add(url);
             }
         }
+        path.add(AUTH_LOGIN_BEFORE_URL);
         path.add(AUTH_LOGIN_AFTER_URL);
         path.add(AUTH_LOGOUT_URL);
+        path.add(ADD_USER_URL);
         return path;
     }
 }

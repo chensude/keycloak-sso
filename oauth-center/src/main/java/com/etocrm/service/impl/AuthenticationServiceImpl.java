@@ -1,6 +1,6 @@
 package com.etocrm.service.impl;
 
-import com.etocrm.dto.KeyToken;
+import com.etocrm.dto.TokenValue;
 import com.etocrm.request.KeycloakRefreshTokenRequest;
 import com.etocrm.request.KeycloakTokenRequest;
 import com.etocrm.service.AuthenticationService;
@@ -29,31 +29,32 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private String clientSecret;
 
     public AuthenticationServiceImpl(@Value("${auth2.keycloak.token-uri}") String tokenUri) {
+        String mediaType = MediaType.APPLICATION_FORM_URLENCODED_VALUE;
         webClient = WebClient.builder()
                 .baseUrl(tokenUri)
-                .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+                .defaultHeader(HttpHeaders.CONTENT_TYPE, mediaType)
                 .build();
     }
 
     @Override
-    public KeyToken login(String username, String password) {
+    public TokenValue login(String username, String password) {
         return webClient.post()
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                 .bodyValue(
                         new KeycloakTokenRequest(username, password, clientId, clientSecret).toFormUrlEncoded()
                 )
                 .retrieve()
-                .bodyToMono(KeyToken.class)
+                .bodyToMono(TokenValue.class)
                 .block();
     }
 
     @Override
-    public KeyToken refresh(String refreshToken) {
+    public TokenValue refresh(String refreshToken) {
         return webClient.post()
                 .bodyValue(new KeycloakRefreshTokenRequest(refreshToken, clientId, clientSecret)
                         .toFormUrlEncoded())
                 .retrieve()
-                .bodyToMono(KeyToken.class)
+                .bodyToMono(TokenValue.class)
                 .block();
     }
 }

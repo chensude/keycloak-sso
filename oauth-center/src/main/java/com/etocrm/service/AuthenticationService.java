@@ -1,6 +1,6 @@
 package com.etocrm.service;
 
-import com.etocrm.dto.KeyToken;
+import com.etocrm.dto.TokenValue;
 
 /**
  * @author csd
@@ -9,7 +9,7 @@ import com.etocrm.dto.KeyToken;
  **/
 public interface AuthenticationService {
 
-    KeyToken login(String username, String password);
+    TokenValue login(String username, String password);
 
-    KeyToken refresh(String refreshToken);
+    TokenValue refresh(String refreshToken);
 }

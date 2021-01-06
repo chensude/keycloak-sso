@@ -43,6 +43,7 @@ auth2:
     client-id: ${oauth.base.client-id}
     client-secret: ${oauth.base.secret}
     token-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/token
+    user-uri: ${oauth.base.url}/auth/admin/realms/${oauth.base.reaml}/users
 
 server:
   port: 8081
@@ -68,3 +69,4 @@ oauth:
 logging:
   level:
     com.etocrm: error
+    com.alibaba.nacos.client.naming: error

@@ -31,7 +31,7 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
 //    private UserService userService;
 //    @Autowired
 //    private RoleService roleService;
-
+//todo
     private GrantedAuthoritiesMapper grantedAuthoritiesMapper;
 
     public void setGrantedAuthoritiesMapper(GrantedAuthoritiesMapper grantedAuthoritiesMapper) {
@@ -54,8 +54,10 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
         List<UacAction> ownAuthList = new ArrayList<>();
         UacAction uacAction1 = new UacAction("/test", "2", "23", "321", "321");
         UacAction uacAction2 = new UacAction("/hi", "2", "23", "321", "321");
+        UacAction uacAction3 = new UacAction("/add/user", "2", "23", "321", "321");
         ownAuthList.add(uacAction1);
         ownAuthList.add(uacAction2);
+        ownAuthList.add(uacAction3);
         List<GrantedAuthority> authList = new ArrayList<>();
         for(UacAction uacAction: ownAuthList) {
             SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(uacAction.getUrl());

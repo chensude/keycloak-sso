@@ -1,36 +1,45 @@
-#spring:
-#  security:
-#    oauth2:
-#      client:
-#        registration:
-#          custom:
-#            client-id: sso-client-2
-#            client-secret: 2a8a69e0-17b9-4e88-a6bd-ad888c80ca41
-#            authorization-grant-type: authorization_code
-#            redirect-uri: http://localhost:8083/client-two/login/oauth2/code/custom
-#        provider:
-#          custom:
-#            authorization-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/auth
-#            token-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/token
-#            user-info-uri: http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/userinfo
-#            user-name-attribute: preferred_username
-#      resourceserver:
-#        jwt:
-#          jwk-set-uri: ${JWK_SET_URI:http://localhost:8080/auth/realms/sso-demo/protocol/openid-connect/certs}
-
 spring:
   cloud:
     nacos:
       discovery:
         namespace: e2562b25-c730-42ff-ace1-fa3a5fed5fbb
         server-addr: 10.100.20.243:8848
+  security:
+    oauth2:
+      client:
+        registration:
+          custom:
+            client-id: ${oauth.base.client-id}
+            client-secret: ${oauth.base.secret}
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8083/login/oauth2/code/custom
+        provider:
+          custom:
+            authorization-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/auth
+            token-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/token
+            user-info-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/userinfo
+            user-name-attribute: preferred_username
+
+      resourceserver:
+        jwt:
+          jwk-set-uri: ${JWK_SET_URI:${oauth.base.url}/auth/realms/${oauth.base.reaml}/protocol/openid-connect/certs}
+          issuer-uri: ${oauth.base.url}/auth/realms/${oauth.base.reaml}
+
   application:
     name: sso-client-two
 server:
   port: 8083
-#  servlet:
-#    context-path: /oauth-center
 
 feign:
   hystrix:
     enabled: true
+auth2:
+  keycloak:
+    user-uri: https://sha-keycloak.etocrm.net/auth/admin/realms/myrealm/users
+
+oauth:
+  base:
+    url: https://sha-keycloak.etocrm.net
+    secret: 56d487f9-b380-4b48-8c31-3f3fdc8d801d
+    client-id: sso-client-2
+    reaml: myrealm
