@@ -8,12 +8,13 @@ import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 @Slf4j
 @NoArgsConstructor
 public class OAuth2FeignRequestInterceptor implements RequestInterceptor {
-    private static final String BEARER_TOKEN_TYPE = "bearer";
+    private static final String BEARER_TOKEN_TYPE = "Bearer";
 
     /**
      * Apply.
@@ -22,7 +23,7 @@ public class OAuth2FeignRequestInterceptor implements RequestInterceptor {
      */
     @Override
     public void apply(RequestTemplate template) {
-        //todo 令牌失效没测试
+
         KeycloakAuthenticationToken authentication = (KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         String token = "";
         if(authentication!=null) {

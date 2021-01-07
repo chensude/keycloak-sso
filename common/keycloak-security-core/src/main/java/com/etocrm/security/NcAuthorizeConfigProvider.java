@@ -24,7 +24,7 @@ public class NcAuthorizeConfigProvider implements AuthorizeConfigProvider {
     @Override
     public boolean config(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry config) {
         config.antMatchers("/actuator/**","/druid/**", "/auth/**", "/swagger-ui.html", "/swagger-resources/**", "/v2/api-docs",
-                "*.js", "/**/*.js", "*.css", "/**/*.css", "*.html", "/**/*.html","/webjars/**","/","/oauth2/**").permitAll();
+                "*.js", "/**/*.js", "*.css", "/**/*.css", "*.html", "/**/*.html","/webjars/**","/","/oauth2/**","/sso/login","/favicon.ico","/logout").permitAll();
 
         return false;
     }

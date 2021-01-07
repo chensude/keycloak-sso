@@ -5,7 +5,10 @@ import org.keycloak.adapters.KeycloakConfigResolver;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
+import org.keycloak.adapters.springsecurity.filter.KeycloakAuthenticationProcessingFilter;
+import org.keycloak.adapters.springsecurity.filter.KeycloakPreAuthActionsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,6 +16,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
 import org.springframework.security.core.authority.mapping.SimpleAuthorityMapper;
 import org.springframework.security.core.session.SessionRegistryImpl;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
 import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
@@ -23,10 +27,16 @@ import org.springframework.security.web.authentication.session.SessionAuthentica
  **/
 @KeycloakConfiguration
 public class KeyCloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+
     @Autowired
     private SecurityAuthenticationProvider authenticationProvider;
     @Autowired
     private AuthorizeConfigManager authorizeConfigManager;
+    @Autowired
+    private KeycloakAuthenticationProcessingFilter keycloakAuthenticationProcessingFilter;
+
+    @Autowired
+    private KeycloakPreAuthActionsFilter keycloakPreAuthActionsFilter;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -34,26 +44,27 @@ public class KeyCloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
         auth.authenticationProvider(authenticationProvider);
     }
 
+
     @Bean
     public KeycloakConfigResolver keycloakConfigResolver() {
         return new KeycloakSpringBootConfigResolver();
     }
 
-//    @Bean
-//    public FilterRegistrationBean keycloakAuthenticationProcessingFilterRegistrationBean(
-//            KeycloakAuthenticationProcessingFilter filter) {
-//        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
-//        registrationBean.setEnabled(true);
-//        return registrationBean;
-//    }
-//
-//    @Bean
-//    public FilterRegistrationBean keycloakPreAuthActionsFilterRegistrationBean(
-//            KeycloakPreAuthActionsFilter filter) {
-//        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
-//        registrationBean.setEnabled(true);
-//        return registrationBean;
-//    }
+    @Bean
+    public FilterRegistrationBean keycloakAuthenticationProcessingFilterRegistrationBean(
+            KeycloakAuthenticationProcessingFilter filter) {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
+        registrationBean.setEnabled(true);
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean keycloakPreAuthActionsFilterRegistrationBean(
+            KeycloakPreAuthActionsFilter filter) {
+        FilterRegistrationBean registrationBean = new FilterRegistrationBean(filter);
+        registrationBean.setEnabled(true);
+        return registrationBean;
+    }
 
     @Bean
     @Override
@@ -70,9 +81,12 @@ public class KeyCloakSecurityConfig extends KeycloakWebSecurityConfigurerAdapter
 //                .permitAll().anyRequest().authenticated())
                 .oauth2Login(Customizer.withDefaults())
                 .oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
-
+                .addFilterBefore(keycloakAuthenticationProcessingFilter, FilterSecurityInterceptor.class)
+               . addFilterBefore(keycloakPreAuthActionsFilter, KeycloakAuthenticationProcessingFilter.class)
+              //  .addFilterAfter(new MyFilter(), FilterSecurityInterceptor.class)
         .csrf().disable();
         authorizeConfigManager.config(http.authorizeRequests());
     }
+
 }
 

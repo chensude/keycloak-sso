@@ -6,6 +6,8 @@ import com.etocrm.service.UacPermissionService;
 import com.google.common.base.Joiner;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
@@ -17,11 +19,12 @@ import java.util.Set;
 @Component("permissionService")
 public class UacPermissionServiceImpl implements UacPermissionService {
     private AntPathMatcher antPathMatcher = new AntPathMatcher();
-    
+    @Autowired
+    private RedisTemplate redisTemplate;
     @Override
     public boolean hasPermission(Authentication authentication, HttpServletRequest request) {
         String currentLoginName = SecurityUtils.getCurrentLoginName();
-        Set<String> currentAuthorityUrl = SecurityUtils.getCurrentAuthorityUrl();
+        Set<String> currentAuthorityUrl = SecurityUtils.getCurrentAuthorityUrl(redisTemplate);
         String requestURI = request.getRequestURI();
         log.info("验证权限loginName={}, requestURI={}, hasAuthorityUrl={}", currentLoginName, requestURI, Joiner.on(",").join(currentAuthorityUrl));
 

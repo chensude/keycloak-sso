@@ -5,14 +5,18 @@ import com.etocrm.dto.TokenValue;
 import com.etocrm.rest.UacFeignClient;
 import com.etocrm.service.AuthenticationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.core.OAuth2AccessToken;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -28,18 +32,43 @@ public class LoginController {
     private OAuth2AuthorizedClientService authorizedClientService;
     @Autowired
     private UacFeignClient uacFeignClient;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     public LoginController(AuthenticationService authenticationService) {
         this.authenticationService = authenticationService;
     }
-    @GetMapping("/hi")
+    @GetMapping("/test")
+    public String testUnAuthenticaiton() {
+        return "test-success";
+    }
+
+    @GetMapping("/feign")
     public String testFeignClient() {
         return uacFeignClient.greeting();
     }
 
-    @GetMapping("/login")
-    public String login() {
-        return "success";
+    @GetMapping("/test1")
+    public String test1() {
+        return "test1-success";
+    }
+
+
+    @PostMapping("/login")
+    public ResponseEntity<TokenValue> login(@RequestParam("username") String username,@RequestParam("password") String password) {
+        return new ResponseEntity<>(authenticationService.login(username,password), HttpStatus.OK);
+
+    }
+
+//    @GetMapping("/loginIn")
+//    public String loginIn(@RequestParam String username,@RequestParam String password)  {
+//        TokenValue login = authenticationService.login(username, password);
+//    }
+
+    @GetMapping("/logout")
+    public String login(HttpServletRequest request) throws ServletException {
+        request.logout();
+        return "注销成功";
     }
 
     @PostMapping(value = "/refresh/token")

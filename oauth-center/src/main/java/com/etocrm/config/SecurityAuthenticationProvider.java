@@ -6,6 +6,8 @@ import org.keycloak.KeycloakPrincipal;
 import org.keycloak.KeycloakSecurityContext;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.keycloak.representations.AccessToken;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -31,8 +33,12 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
 //    private UserService userService;
 //    @Autowired
 //    private RoleService roleService;
+
 //todo
+    @Autowired
+    private RedisTemplate redisTemplate;
     private GrantedAuthoritiesMapper grantedAuthoritiesMapper;
+
 
     public void setGrantedAuthoritiesMapper(GrantedAuthoritiesMapper grantedAuthoritiesMapper) {
         this.grantedAuthoritiesMapper = grantedAuthoritiesMapper;
@@ -43,6 +49,7 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
      */
     @Override
     public Authentication authenticate(Authentication authentication) throws RuntimeException {
+
         //从token中获取用户信息
         KeycloakAuthenticationToken token = (KeycloakAuthenticationToken) authentication;
         AccessToken accessToken = getAccessToken((token));
@@ -52,12 +59,15 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
         //根据userId查询本系统用户权限，放入token中
         //    List<GrantedAuthority> grantedAuthorities = roleService.getGrantedAuthorities(userId);
         List<UacAction> ownAuthList = new ArrayList<>();
-        UacAction uacAction1 = new UacAction("/test", "2", "23", "321", "321");
+        //UacAction uacAction1 = new UacAction("/test1", "2", "23", "321", "321");
+        UacAction uacAction4 = new UacAction("/feign", "2", "23", "321", "321");
+
         UacAction uacAction2 = new UacAction("/hi", "2", "23", "321", "321");
-        UacAction uacAction3 = new UacAction("/add/user", "2", "23", "321", "321");
-        ownAuthList.add(uacAction1);
+        UacAction uacAction3 = new UacAction("/login", "2", "23", "321", "321");
+        //ownAuthList.add(uacAction1);
         ownAuthList.add(uacAction2);
         ownAuthList.add(uacAction3);
+        ownAuthList.add(uacAction4);
         List<GrantedAuthority> authList = new ArrayList<>();
         for(UacAction uacAction: ownAuthList) {
             SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(uacAction.getUrl());
@@ -68,6 +78,7 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
                 new KeycloakAuthenticationToken(token.getAccount(),
                         token.isInteractive(), mapAuthorities(authList));
 
+      //  redisTemplate.opsForSet().add("urls","/test","/login");
         return authenticationToken;
     }
 
@@ -89,5 +100,6 @@ public class SecurityAuthenticationProvider implements AuthenticationProvider {
     public boolean supports(Class<?> aClass) {
         return KeycloakAuthenticationToken.class.isAssignableFrom(aClass);
     }
+
 }
 

@@ -3,6 +3,8 @@ package com.etocrm.security;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
+import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,13 +47,22 @@ public class SecurityUtils {
 
     }
 
-    public static Set<String> getCurrentAuthorityUrl() {
-
+    public static Set<String> getCurrentAuthorityUrl(RedisTemplate redisTemplate) {
+        Collection<? extends GrantedAuthority> authorities =null;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        authorities = authentication.getAuthorities();
+        if(authentication.getClass().equals(KeycloakAuthenticationToken.class)) {
+           authorities=( (KeycloakAuthenticationToken)authentication).getAuthorities();
+        }
 
 
         Set<String> path = new HashSet<>();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+    //    Set urls = redisTemplate.opsForSet().members("urls");
+    //    redisTemplate.keys("urls").clear();
+     //   urls.forEach(url->path.add(url.toString()));
+
+        //  Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+       // Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         for (final GrantedAuthority authority : authorities) {
             String url = authority.getAuthority().replace("ROLE_","");
             if (StringUtils.isNotEmpty(url)) {
@@ -64,4 +75,6 @@ public class SecurityUtils {
         path.add(ADD_USER_URL);
         return path;
     }
+
+
 }
