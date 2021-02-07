@@ -1,4 +1,4 @@
-package com.etocrm.security;
+package org.etocrm.auth.security;
 
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
