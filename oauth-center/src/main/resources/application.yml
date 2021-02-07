@@ -66,10 +66,10 @@ keycloak:
     secret: ${oauth.base.secret}
 oauth:
   base:
-    url: https://sha-keycloak.etocrm.net
-    secret: ec35ce77-fb0b-405e-8254-fbedcb1eee70
+    url: http://10.100.20.243:8088
+    secret: e9cdd618-5313-47da-93db-9eecfd48f306
     client-id: oauth-center
-    reaml: myrealm
+    reaml: master
 
 logging:
   level:

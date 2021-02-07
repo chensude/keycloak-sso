@@ -32,6 +32,6 @@ public class OAuth2FeignAutoConfiguration {
 
     @Bean
     public ErrorDecoder errorDecoder() {
-        return new Oauth2FeignErrorInterceptor();
+        return new OAuth2FeignErrorInterceptor();
     }
 }

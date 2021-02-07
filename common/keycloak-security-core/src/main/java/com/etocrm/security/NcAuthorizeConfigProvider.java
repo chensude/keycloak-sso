@@ -1,4 +1,4 @@
-package org.etocrm.auth.security;
+package com.etocrm.security;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;

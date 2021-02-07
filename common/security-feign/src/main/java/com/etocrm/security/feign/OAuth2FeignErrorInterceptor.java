@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 
 @Slf4j
-public class Oauth2FeignErrorInterceptor  implements ErrorDecoder  {
+public class OAuth2FeignErrorInterceptor implements ErrorDecoder  {
     private final ErrorDecoder defaultErrorDecoder = new ErrorDecoder.Default();
 
     /**
